@@ -10,14 +10,22 @@ public class JwtValidator {
 
     private String secret = "youtube";
 
+
     public JwtUser validate(String token){
-        Claims body = Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token).getBody();
-        JwtUser jwtuser = new JwtUser();
-        jwtuser.setUserName(body.getSubject());
-        jwtuser.setId(Long.parseLong((String)body.get("userId")));
-        jwtuser.setRole((String)body.get("role"));
+         JwtUser jwtuser = null;
+        try {
+            Claims body = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token).getBody();
+            jwtuser = new JwtUser();
+            jwtuser.setUserName(body.getSubject());
+            jwtuser.setId(Long.parseLong((String)body.get("userId")));
+            jwtuser.setRole((String)body.get("role"));
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+
         return jwtuser;
     }
 }
